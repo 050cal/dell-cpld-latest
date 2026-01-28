@@ -1,1 +1,10 @@
-{}
+{
+  "generated_at": "2026-01-28T17:10:36.452454+00:00",
+  "source": "dell fetchdriversbyproduct",
+  "country": "en-us",
+  "data": {
+    "poweredge-r650": null,
+    "poweredge-r750": null,
+    "poweredge-r740": null
+  }
+}
