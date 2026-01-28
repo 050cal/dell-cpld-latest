@@ -29,22 +29,33 @@ def call_dell_api(productcode: str, oscode: str, country: str = COUNTRY, retries
     params = {
         "productcode": productcode,
         "oscode": oscode,
+        "lob": "PowerEdge",          # <— important for servers
         "initialload": True,
         "_": int(time.time() * 1000),
     }
     url = API_URL.format(country=country)
+
+    headers = dict(HEADERS)
+    headers["Accept"] = "application/json, text/javascript, */*; q=0.01"
+    headers["Referer"] = f"https://www.dell.com/support/home/{country}/product-support/product/{productcode}/drivers"
+
     last_exc = None
     for attempt in range(1, retries + 1):
         try:
-            resp = requests.get(url, params=params, headers=HEADERS, timeout=30)
-            if resp.status_code == 200 and resp.headers.get("Content-Type", "").startswith("application/json"):
+            resp = requests.get(url, params=params, headers=headers, timeout=30)
+            print(f"[debug] GET {resp.url} -> {resp.status_code} {resp.reason}")
+            ctype = resp.headers.get("Content-Type","")
+            if resp.status_code == 200 and ctype.startswith("application/json"):
                 return resp.json()
             elif resp.status_code == 204:
+                print("[warn] 204 No Content; retrying...")
                 time.sleep(backoff * attempt)
             else:
+                print(f"[warn] Unexpected status {resp.status_code} (Content-Type={ctype}); retrying...")
                 time.sleep(backoff * attempt)
         except Exception as e:
             last_exc = e
+            print(f"[error] Exception: {e}; retrying...")
             time.sleep(backoff * attempt)
     if last_exc:
         warnings.warn(f"call_dell_api({productcode}, {oscode}) failed: {last_exc}")
