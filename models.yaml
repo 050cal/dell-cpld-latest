@@ -1,0 +1,8 @@
+servers:
+  - productcode: poweredge-r650
+    oscodes: [NAA]
+
+  - productcode: poweredge-r750
+    oscodes: [NAA]
+
+  - productcode: poweredge-r740
