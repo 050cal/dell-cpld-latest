@@ -1,8 +1,11 @@
+
 servers:
   - productcode: poweredge-r650
-    oscodes: [NAA]
+    oscodes: [NAA, W2025, W2022, W2019, WS16]
 
   - productcode: poweredge-r750
-    oscodes: [NAA]
+    oscodes: [NAA, W2025, W2022, W2019, WS16]
 
   - productcode: poweredge-r740
+    oscodes: [NAA, W2022, W2019, WS16]
+
